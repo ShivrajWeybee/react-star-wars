@@ -1,0 +1,10 @@
+
+- design : ❌
+
+- navigation : ❌
+
+- pagination : ❌
+
+
+
+-- related links mate 1k alag component.
