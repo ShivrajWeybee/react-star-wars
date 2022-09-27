@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import axios from 'axios'
 import { Link, Outlet, useParams } from 'react-router-dom'
 import { CharLink } from './CharLink'
@@ -26,7 +26,7 @@ export const Character = () => {
         <div className='character-display_container'>
             {
                 data.length > 0 ? data.map(i => <div>
-                    <Link key={i.name} to={`/character/${i.url.split('/').at(-2)}`}>{<CharLink charId={i} />}</Link>
+                    <Link key={i.name} to={`/character/${i.url.split('/').at(-2)}`}>{<CharLink charId={i} type='characters' />}</Link>
                 </div>) : <Loader />
             }
             {/* <Outlet /> */}

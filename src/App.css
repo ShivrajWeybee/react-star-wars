@@ -27,9 +27,11 @@ body {
 .home {
   margin: 50px 0;
   /* min-height: 100vh; */
-  gap: 100px;
+  gap: 2rem;
   flex-direction: column;
   justify-content: flex-start;
+  width: 80%;
+  margin: auto;
 }
 
 .home nav {
@@ -79,7 +81,7 @@ body {
 }
 
 .character-display_container {
-  width: 90%;
+  width: 80%;
   margin: auto;
   display: grid;
   grid-template-columns: repeat(5, minmax(200px, 1fr));
@@ -89,7 +91,6 @@ body {
 
 .char-link_card {
   position: relative;
-  width: 80%;
 }
 /* .char-link_img-container {
   border-radius: 10px 10px 0 0;
@@ -113,50 +114,27 @@ body {
   text-align: center;
 }
 
-.details_info-container {
-  align-items: stretch;
-  color: whitesmoke;
-}
-.details_img-container {
-  width: 250px;
-  object-fit: contain;
-}
-.details_img-container img {
-  width: 100%;
-}
-.card-info {
-  padding: 0 20px;
-  background-color: grey;
-}
-.releted-cards {
-  background-color: grey;
-  border: 1px solid white;
-  align-items: baseline;
-  gap: 1rem;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-.releted-cards a {
-  color: whitesmoke;
-  text-decoration: none;
-}
-.related-card-item {
-  width: 150px;
-  object-fit: cover;
-}
-.related-card-item img {
-  width: 100%;
-  object-fit: cover;
-}
 
-
-
+@media screen and (max-width: 1500px) {
+  .character-display_container {
+    grid-template-columns: repeat(4, minmax(200px, 1fr));
+  }
+}
+@media screen and (max-width: 1200px) {
+  .character-display_container {
+    grid-template-columns: repeat(3, minmax(200px, 1fr));
+  }
+}
 @media screen and (max-width: 1150px) {
   .home nav {
     grid-template-columns: repeat(2, minmax(300px, 1fr));
   }
 }
-
+@media screen and (max-width: 860px) {
+  .character-display_container {
+    grid-template-columns: repeat(3, minmax(150px, 1fr));
+  }
+}
 @media screen and (max-width: 750px) {
   body {
     width: 90%;
@@ -165,9 +143,15 @@ body {
   .home nav {
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   }
+  .character-display_container {
+    grid-template-columns: repeat(2, minmax(150px, 1fr));
+  }
 }
 @media screen and (max-width: 450px) {
   .home_logo {
     width:95%;
+  }
+  .character-display_container {
+    grid-template-columns: repeat(1, minmax(150px, 1fr));
   }
 }

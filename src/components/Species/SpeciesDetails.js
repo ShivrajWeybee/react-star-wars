@@ -2,6 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import axios from 'axios'
 import { RelatedLinks } from '../relatedLinks/RelatedLinks'
+import { Loader } from '../Loader'
+
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import { NavigationBar } from '../NavigationBar'
 
 export const SpeciesDetails = () => {
 
@@ -46,37 +52,59 @@ export const SpeciesDetails = () => {
         });
     }, [data.films])
 
+    var settings = {
+        className: "slider variable-width",
+        dots: false,
+        infinite: false,
+        speed: 500,
+        slidesToScroll: 3,
+        variableWidth: true
+    };
+
     return (
         <div>
+            <NavigationBar />
             {
                 data &&
-                <div>
-                    <div>
+                <div className='detailpage-container'>
+                    <div className='details_info-container flex'>
                         <img src={`https://starwars-visualguide.com/assets/img/species/${speciesId}.jpg`} alt='movie poster' />
-                        <p>{data.name}</p>
-                        <p>{data.classification}</p>
-                        <p>{data.designation}</p>
-                        <p>{data.language}</p>
-                        <p>{data.average_lifespan}</p>
-                        <p>{data.average_height}</p>
-                        <p>{data.hair_colors}</p>
-                        <p>{data.skin_colors}</p>
-                        <p>{data.eye_colors}</p>
+                        <div className='details_info'>
+                            <p className='title'>{data.name}</p>
+                            <p>{data.classification}</p>
+                            <p>{data.designation}</p>
+                            <p>{data.language}</p>
+                            <p>{data.average_lifespan}</p>
+                            <p>{data.average_height}</p>
+                            <p>{data.hair_colors}</p>
+                            <p>{data.skin_colors}</p>
+                            <p>{data.eye_colors}</p>
+                        </div>
                     </div>
-                    <div>
-                        <div className='flex flex-column wrap'>
-                            <h2>Related Characters</h2>
-                            <div className='releted-cards flex'>
+                    <div className='all-related-carousels-parent flex'>
+                        <div className='carousel-parent'>
+                            <h2>Related Films</h2>
+                            <div className='releted-cards'>
                                 {
-                                    chars && chars.map(char => <Link to={`/character/${char.imgId}`}><RelatedLinks key={chars[char]} imgUrl={char.imgUrl} linkTitle={char.title} /></Link>)
+                                    chars.length > 0 ?
+                                        <Slider {...settings}>
+                                            {
+                                                chars && chars.map(char => <Link to={`/character/${char.imgId}`}><RelatedLinks key={chars[char]} imgUrl={char.imgUrl} linkTitle={char.title} /></Link>)
+                                            }
+                                        </Slider> : <Loader />
                                 }
                             </div>
                         </div>
-                        <div className='flex flex-column'>
+                        <div className='carousel-parent'>
                             <h2>Related Films</h2>
-                            <div className='releted-cards flex'>
+                            <div className='releted-cards'>
                                 {
-                                    films && films.map(film => <Link to={`/films/${film.imgId}`} ><RelatedLinks key={films[film]} imgUrl={film.imgUrl} linkTitle={film.title} /></Link>)
+                                    films.length > 0 ?
+                                        <Slider {...settings}>
+                                            {
+                                                films && films.map(film => <Link to={`/films/${film.imgId}`} ><RelatedLinks key={films[film]} imgUrl={film.imgUrl} linkTitle={film.title} /></Link>)
+                                            }
+                                        </Slider> : <Loader />
                                 }
                             </div>
                         </div>

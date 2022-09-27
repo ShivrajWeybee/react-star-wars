@@ -1,4 +1,6 @@
 import './App.css';
+import './Style/detailPage.css'
+import './Style/pagination.css'
 import { Routes, Route } from 'react-router-dom'
 import { Home } from './components/Home';
 import { Character } from './components/Characters/Character';
@@ -15,34 +17,39 @@ import { VehiclesDetails } from './components/Vehicles/VehiclesDetails';
 import { Planets } from './components/Planets/Planets';
 import { PlanetsDetails } from './components/Planets/PlanetsDetails';
 import { Header } from './components/Header';
+import { Provider } from 'react-redux';
+import store from './redux/store';
 
 function App() {
   return (
-    <div className='App'>
-      <Header />
-      <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='character' element={<Character />} >
-          <Route path=':characterId' element={<Details />} />
-        </Route>
-        <Route path='films' element={<Films />} >
-          <Route path=':filmId' element={<FilmDetails />} />
-        </Route>
-        <Route path='species' element={<Species />}>
-          <Route path=':speciesId' element={<SpeciesDetails />} />
-        </Route>
-        <Route path='starships' element={<Starships />}>
-          <Route path=':starshipId' element={<StartshipsDetails />} />
-        </Route>
-        <Route path='vehicles' element={<Vehicles />}>
-          <Route path=':vehicleId' element={<VehiclesDetails />} />
-        </Route>
-        <Route path='planets' element={<Planets />}>
-          <Route path=':planetId' element={<PlanetsDetails />} />
-        </Route>
-        <Route path='*' element={<NoMatch />} />
-      </Routes>
-    </div>
+    <Provider store={store}>
+      <div className='App'>
+        <Header />
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='character/:characterId' element={<Details />} />
+          <Route path='character' element={<Character />} />
+          {/* <Route path='character' element={<Character />} >
+          </Route> */}
+          <Route path='films' element={<Films />} >
+            <Route path=':filmId' element={<FilmDetails />} />
+          </Route>
+          <Route path='species' element={<Species />}>
+            <Route path=':speciesId' element={<SpeciesDetails />} />
+          </Route>
+          <Route path='starships' element={<Starships />}>
+            <Route path=':starshipId' element={<StartshipsDetails />} />
+          </Route>
+          <Route path='vehicles' element={<Vehicles />}>
+            <Route path=':vehicleId' element={<VehiclesDetails />} />
+          </Route>
+          <Route path='planets' element={<Planets />}>
+            <Route path=':planetId' element={<PlanetsDetails />} />
+          </Route>
+          <Route path='*' element={<NoMatch />} />
+        </Routes>
+      </div>
+    </Provider>
   );
 }
 

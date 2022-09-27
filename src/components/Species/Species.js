@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { Link, Outlet, useParams } from 'react-router-dom'
-import { SpeciesLink } from './SpeciesLink'
 import { Loader } from '../Loader'
+import { NavigationBar } from '../NavigationBar'
+import { CharLink } from '../Characters/CharLink'
 
 export const Species = () => {
 
@@ -23,12 +24,15 @@ export const Species = () => {
     if (param.hasOwnProperty('speciesId') === true) return <Outlet />
 
     return (
-        <div className='character-display_container'>
-            {
-                data.length > 0 ? data.map(i => <div>
-                    <Link key={i.name} to={`/species/${i.url.split('/').at(-2)}`}>{<SpeciesLink speciesId={i} />}</Link>
-                </div>) : <Loader />
-            }
-        </div>
+        <>
+            <NavigationBar />
+            <div className='character-display_container'>
+                {
+                    data.length > 0 ? data.map(i => <div>
+                        <Link key={i.name} to={`/species/${i.url.split('/').at(-2)}`}>{<CharLink charId={i} type='species' />}</Link>
+                    </div>) : <Loader />
+                }
+            </div>
+        </>
     )
 }

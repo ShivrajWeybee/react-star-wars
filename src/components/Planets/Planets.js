@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { Link, Outlet, useParams } from 'react-router-dom'
-import { PlanetsLink } from './PlanetsLink'
 import { Loader } from '../Loader'
+import { NavigationBar } from '../NavigationBar'
+import { CharLink } from '../Characters/CharLink'
 
 export const Planets = () => {
     const param = useParams()
@@ -22,12 +23,15 @@ export const Planets = () => {
     if (param.hasOwnProperty('planetId') === true) return <Outlet />
 
     return (
-        <div className='character-display_container'>
-            {
-                data.length > 0 ? data.map(i => <div>
-                    <Link key={i.name} to={`/planets/${i.url.split('/').at(-2)}`}>{<PlanetsLink planetId={i} />}</Link>
-                </div>) : <Loader />
-            }
-        </div>
+        <>
+            <NavigationBar />
+            <div className='character-display_container'>
+                {
+                    data.length > 0 ? data.map(i => <div>
+                        <Link key={i.name} to={`/planets/${i.url.split('/').at(-2)}`}>{<CharLink charId={i} type='planets' />}</Link>
+                    </div>) : <Loader />
+                }
+            </div>
+        </>
     )
 }

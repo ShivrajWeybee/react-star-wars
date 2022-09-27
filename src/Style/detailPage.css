@@ -1,0 +1,102 @@
+
+
+.detailpage-container {
+    width: 80%;
+    margin: auto;
+    color: rgba(255, 255, 255, 0.651);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.details_info-container {
+    align-items: stretch;
+    justify-content: flex-start;
+    height: 400px;
+    margin-bottom: 2rem;
+    overflow: hidden;
+    border-radius: 5px;
+  }
+  .details_info {
+    /* border: 1px solid yellow; */
+    background-color: rgba(73, 73, 73, 0.596);
+    padding: 20px;
+    padding-left: 50px;
+    width: 100%;
+  }
+  .title {
+    color: white;
+    font-size: 30px !important;
+  }
+  .details_info p {
+    margin: 10px 0;
+    font-size: 18px;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  .releted-cards {
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .releted-cards a {
+    color: rgba(255, 255, 255, 0.651);
+    text-decoration: none;
+  }
+  .related-card-item {
+    width: 60px;
+    object-fit: cover;
+  }
+  .related-card-item img {
+    width: 100%;
+    object-fit: cover;
+    max-height: 70px;
+    min-height: 70px;
+    border-radius: 50%;
+  }
+  .related-card-item p {
+    font-size: 12px;
+    text-align: center;
+  }
+  
+  .carousel-parent {
+    /* background-color: rgb(61, 61, 61); */
+    background-color: rgba(73, 73, 73, 0.596);
+    margin-bottom: 2rem;
+    /* width: 30%; */
+    padding: 2rem;
+    min-height: 250px;
+    max-height: 250px;
+  }
+  .carousel-parent h2 {
+    margin-bottom: 1.2rem;
+    text-decoration: underline;
+  }
+  .slick-slide {
+    margin: 0 1rem;
+    height: auto !important;
+  }
+  .slick-track {
+    height: 100px;
+  }
+  .slick-prev:before, .slick-next:before {
+    color: rgba(255, 255, 255, 0.651) !important;
+
+  }
+
+  .all-related-carousels-parent {
+    /* flex-wrap: wrap;
+    justify-content: space-between; */
+    gap: 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  }
+
+  @media screen and (max-width: 950px) {
+    .details_info-container {
+      flex-direction: column;
+      height: 100%;
+    }
+    .details_info-container img {
+      height: 500px;
+      width: 100%;
+      object-fit: contain;
+    }
+  }

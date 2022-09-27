@@ -3,15 +3,16 @@ import { connect } from 'react-redux'
 import { fetchUsers } from '../../redux/actions'
 import axios from 'axios'
 import { Link, Outlet, useParams } from 'react-router-dom'
-import { FilmLink } from './FilmLink'
 import { Loader } from '../Loader'
+import { NavigationBar } from '../NavigationBar'
+import { CharLink } from '../Characters/CharLink'
 
-export const Films = () => {
+export const Films = ({ userData, fetchUser }) => {
     const param = useParams()
     const [data, setData] = useState([])
 
     useEffect(() => {
-        fetchUsers()
+        fetchUser('people')
     }, [])
 
     const mapStateToProps = (state) => {
@@ -22,7 +23,7 @@ export const Films = () => {
 
     const mapDispatchToProps = (dispatch) => {
         return {
-            fetchUser: () => dispatch(fetchUsers('people'))
+            fetchUser: (category) => dispatch(fetchUsers(category))
         }
     }
 
@@ -42,17 +43,20 @@ export const Films = () => {
     if (param.hasOwnProperty('filmId') === true) return <Outlet />
 
     return (
-        <div className='character-display_container'>
-            {
-                data.length > 0 ?
-                    data.map(i =>
-                        <div>
-                            <Link key={i.title} to={`/films/${i.url.split('/').at(-2)}`}>{<FilmLink filmId={i} />}</Link>
-                        </div>
-                    )
-                    : <Loader />
-            }
-            {/* <Outlet /> */}
-        </div>
+        <>
+            <NavigationBar />
+            <div className='character-display_container'>
+                {
+                    data.length > 0 ?
+                        data.map(i =>
+                            <div>
+                                <Link key={i.title} to={`/films/${i.url.split('/').at(-2)}`}>{<CharLink charId={i} type='films' />}</Link>
+                            </div>
+                        )
+                        : <Loader />
+                }
+                {/* <Outlet /> */}
+            </div>
+        </>
     )
 }
