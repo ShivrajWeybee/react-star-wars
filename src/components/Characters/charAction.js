@@ -1,4 +1,4 @@
-import { FETCH_CHAR_FAILURE, FETCH_CHAR_REUEST, FETCH_CHAR_SUCCESS } from "./types"
+import { FETCH_CHAR_FAILURE, FETCH_CHAR_REUEST, FETCH_CHAR_SUCCESS } from "../../redux/types"
 import axios from 'axios'
 
 export const fetchCharRequest = () => {
@@ -21,11 +21,11 @@ export const fetchCharFailure = (error) => {
     }
 }
 
-export const fetchUsers = (category) => {
+export const fetchUsers = (charId) => {
     return (dispatch) => {
         dispatch(fetchCharRequest)
         axios
-            .get(`https://swapi.dev/api/${category}/`)
+            .get(`https://swapi.dev/api/people/${charId}/`)
             .then(res => {
                 const users = res.data
                 dispatch(fetchCharSuccess(users))

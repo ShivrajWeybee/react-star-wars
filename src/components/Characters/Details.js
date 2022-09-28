@@ -3,22 +3,41 @@ import { Link, useParams } from 'react-router-dom'
 import axios from 'axios'
 import { RelatedLinks } from '../relatedLinks/RelatedLinks'
 import { Loader } from '../Loader'
+import { connect, useDispatch, useSelector } from 'react-redux'
+import { FETCH_CHAR_FAILURE, FETCH_CHAR_REUEST, FETCH_CHAR_SUCCESS } from "../../redux/types"
 
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { NavigationBar } from '../NavigationBar'
+import { fetchUsers } from './charAction'
+import { fetchFilms } from '../Films/filmAction'
 
-export const Details = () => {
+let charId;
+
+function Details(props) {
 
     const params = useParams()
-    const charId = params.characterId
+    charId = params.charactersId
+
+    // const character = useSelector(state => state.char)
+    // const dispatchChar = useDispatch()
+    // useEffect(() => {
+    //     dispatchChar(fetchUsers(charId))
+    // }, [charId])
+
+    // const films = useSelector(state => state.film)
+    // const dispatchFilm = useDispatch()
+    // useEffect(() => {
+    //     dispatchFilm(fetchFilms())
+    // })
+
     const [data, setData] = useState({})
-    // const [films, setFilms] = useState([])
-    // const [vehicles, setVehicles] = useState([])
-    // const [starships, setStarships] = useState([])
-    // const [homeworld, setHomeworld] = useState('')
-    // const [species, setSpecies] = useState('')
+    const [films, setFilms] = useState([])
+    const [vehicles, setVehicles] = useState([])
+    const [starships, setStarships] = useState([])
+    const [homeworld, setHomeworld] = useState('')
+    const [species, setSpecies] = useState('')
 
     useEffect(() => {
         axios
@@ -72,6 +91,10 @@ export const Details = () => {
             })
     }, [])
 
+    useEffect(() => {
+        props.fetchChar()
+    }, [])
+
     var settings = {
         className: "slider variable-width",
         dots: false,
@@ -85,20 +108,20 @@ export const Details = () => {
         <div>
             <NavigationBar />
             {
-                data ?
+                props.charData.char.loading ? <Loader /> :
                     <div className='detailpage-container'>
                         <div className='details_info-container flex'>
                             <img src={`https://starwars-visualguide.com/assets/img/characters/${charId}.jpg`} alt='character' />
                             <div className='details_info'>
-                                <p className='title'>{data.name}</p>
-                                <p>Birthyear: {data.birth_year}</p>
-                                <p>Species: {data.species}</p>
-                                <p>Homeworld: {homeworld}</p>
-                                <p>Height: {data.height} cm</p>
-                                <p>Mass: {data.mass} kg</p>
-                                <p>Gender: {data.gender}</p>
-                                <p>Hair color: {data.hair_color}</p>
-                                <p>Skin color: {data.skin_color}</p>
+                                <p className='title'>{props.charData.char.users.name}</p>
+                                <p>Birthyear: {props.charData.char.users.birth_year}</p>
+                                <p>Species: {props.charData.char.users.species}</p>
+                                {/* <p>{props.charData.char.users.name}</p> */}
+                                <p>Height: {props.charData.char.users.height} cm</p>
+                                <p>Mass: {props.charData.char.users.mass} kg</p>
+                                <p>Gender: {props.charData.char.users.gender}</p>
+                                <p>Hair color: {props.charData.char.users.hair_color}</p>
+                                <p>Skin color: {props.charData.char.users.skin_color}</p>
                             </div>
                         </div>
                         <div className='all-related-carousels-parent flex'>
@@ -142,8 +165,23 @@ export const Details = () => {
                                 </div>
                             </div>
                         </div>
-                    </div> : <Loader />
+                    </div>
             }
         </div>
     )
 }
+
+const mapStateToProps = (state, ownProps) => {
+    return {
+        charData: state
+    }
+}
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+    console.log(charId)
+    return {
+        fetchChar: () => dispatch(fetchUsers(charId))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Details)

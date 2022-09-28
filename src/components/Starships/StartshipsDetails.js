@@ -8,14 +8,22 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { NavigationBar } from '../NavigationBar'
+import { fetchStarships } from './starshipAction'
+import { connect } from 'react-redux'
 
-export const StartshipsDetails = () => {
+let starshipId;
+
+function StartshipsDetails(props) {
 
     const params = useParams()
-    const starshipId = params.starshipId
+    starshipId = params.starshipsId
     const [data, setData] = useState({})
     const [films, setFilms] = useState([])
     // const [pilot, setPilot] = useState([])
+
+    useEffect(() => {
+        props.fetchStarship()
+    })
 
     useEffect(() => {
         axios
@@ -53,40 +61,40 @@ export const StartshipsDetails = () => {
         <div>
             <NavigationBar />
             {
-                data &&
-                <div className='detailpage-container'>
-                    <div className='details_info-container flex'>
-                        <img src={`https://starwars-visualguide.com/assets/img/starships/${starshipId}.jpg`} alt='movie poster' />
-                        <div className='details_info'>
-                            <p className='title'>{data.name}</p>
-                            <p>{data.model}</p>
-                            <p>{data.starship_class}</p>
-                            <p>{data.manufacturer}</p>
-                            <p>{data.cost_in_credits}</p>
-                            <p>{data.max_atmosphering_speed} km/h</p>
-                            <p>{data.hyperdrive_rating}</p>
-                            <p>{data.MGLT}</p>
-                            <p>{data.length}</p>
-                            <p>{data.cargo_capacity}</p>
-                            <p>{data.crew}</p>
-                            <p>{data.passengers}</p>
-                        </div>
-                    </div>
-                    <div className='all-related-carousels-parent flex'>
-                        <div className='carousel-parent'>
-                            <h2>Related Films</h2>
-                            <div className='releted-cards'>
-                                {
-                                    films.length > 0 ?
-                                        <Slider {...settings}>
-                                            {
-                                                films && films.map(film => <Link to={`/films/${film.imgId}`} ><RelatedLinks key={films[film]} imgUrl={film.imgUrl} linkTitle={film.title} /></Link>)
-                                            }
-                                        </Slider> : <Loader />
-                                }
+                props.starshipData.loading ? <Loader /> :
+                    <div className='detailpage-container'>
+                        <div className='details_info-container flex'>
+                            <img src={`https://starwars-visualguide.com/assets/img/starships/${starshipId}.jpg`} alt='movie poster' />
+                            <div className='details_info'>
+                                <p className='title'>{props.starshipData.users.name}</p>
+                                <p>{props.starshipData.users.model}</p>
+                                <p>{props.starshipData.users.starship_class}</p>
+                                <p>{props.starshipData.users.manufacturer}</p>
+                                <p>{props.starshipData.users.cost_in_credits}</p>
+                                <p>{props.starshipData.users.max_atmosphering_speed} km/h</p>
+                                <p>{props.starshipData.users.hyperdrive_rating}</p>
+                                <p>{props.starshipData.users.MGLT}</p>
+                                <p>{props.starshipData.users.length}</p>
+                                <p>{props.starshipData.users.cargo_capacity}</p>
+                                <p>{props.starshipData.users.crew}</p>
+                                <p>{props.starshipData.users.passengers}</p>
                             </div>
                         </div>
-                        {/* <div className='carousel-parent'>
+                        <div className='all-related-carousels-parent flex'>
+                            <div className='carousel-parent'>
+                                <h2>Related Films</h2>
+                                <div className='releted-cards'>
+                                    {
+                                        films.length > 0 ?
+                                            <Slider {...settings}>
+                                                {
+                                                    films && films.map(film => <Link to={`/films/${film.imgId}`} ><RelatedLinks key={films[film]} imgUrl={film.imgUrl} linkTitle={film.title} /></Link>)
+                                                }
+                                            </Slider> : <Loader />
+                                    }
+                                </div>
+                            </div>
+                            {/* <div className='carousel-parent'>
                             <h2>Related Films</h2>
                             <div className='releted-cards'>
                                 {
@@ -99,9 +107,23 @@ export const StartshipsDetails = () => {
                                 }
                             </div>
                         </div> */}
+                        </div>
                     </div>
-                </div>
             }
         </div>
     )
 }
+
+const mapStateToProps = (state, ownProps) => {
+    return {
+        starshipData: state.starship,
+    }
+}
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        fetchStarship: () => dispatch(fetchStarships(starshipId))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(StartshipsDetails)

@@ -8,14 +8,22 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { NavigationBar } from '../NavigationBar'
+import { fetchSpecies } from './speciesAction'
+import { connect } from 'react-redux'
 
-export const SpeciesDetails = () => {
+let speciesId;
+
+function SpeciesDetails(props) {
 
     const params = useParams()
-    const speciesId = params.speciesId
+    speciesId = params.speciesId
     const [data, setData] = useState({})
     const [films, setFilms] = useState([])
     const [chars, setChar] = useState([])
+
+    useEffect(() => {
+        props.fetchSpecie()
+    })
 
     useEffect(() => {
         axios
@@ -65,52 +73,66 @@ export const SpeciesDetails = () => {
         <div>
             <NavigationBar />
             {
-                data &&
-                <div className='detailpage-container'>
-                    <div className='details_info-container flex'>
-                        <img src={`https://starwars-visualguide.com/assets/img/species/${speciesId}.jpg`} alt='movie poster' />
-                        <div className='details_info'>
-                            <p className='title'>{data.name}</p>
-                            <p>{data.classification}</p>
-                            <p>{data.designation}</p>
-                            <p>{data.language}</p>
-                            <p>{data.average_lifespan}</p>
-                            <p>{data.average_height}</p>
-                            <p>{data.hair_colors}</p>
-                            <p>{data.skin_colors}</p>
-                            <p>{data.eye_colors}</p>
-                        </div>
-                    </div>
-                    <div className='all-related-carousels-parent flex'>
-                        <div className='carousel-parent'>
-                            <h2>Related Films</h2>
-                            <div className='releted-cards'>
-                                {
-                                    chars.length > 0 ?
-                                        <Slider {...settings}>
-                                            {
-                                                chars && chars.map(char => <Link to={`/character/${char.imgId}`}><RelatedLinks key={chars[char]} imgUrl={char.imgUrl} linkTitle={char.title} /></Link>)
-                                            }
-                                        </Slider> : <Loader />
-                                }
+                props.speciesData.loading ? <Loader /> :
+                    <div className='detailpage-container'>
+                        <div className='details_info-container flex'>
+                            <img src={`https://starwars-visualguide.com/assets/img/species/${speciesId}.jpg`} alt='movie poster' />
+                            <div className='details_info'>
+                                <p className='title'>{props.speciesData.users.name}</p>
+                                <p>{props.speciesData.users.classification}</p>
+                                <p>{props.speciesData.users.designation}</p>
+                                <p>{props.speciesData.users.language}</p>
+                                <p>{props.speciesData.users.average_lifespan}</p>
+                                <p>{props.speciesData.users.average_height}</p>
+                                <p>{props.speciesData.users.hair_colors}</p>
+                                <p>{props.speciesData.users.skin_colors}</p>
+                                <p>{props.speciesData.users.eye_colors}</p>
                             </div>
                         </div>
-                        <div className='carousel-parent'>
-                            <h2>Related Films</h2>
-                            <div className='releted-cards'>
-                                {
-                                    films.length > 0 ?
-                                        <Slider {...settings}>
-                                            {
-                                                films && films.map(film => <Link to={`/films/${film.imgId}`} ><RelatedLinks key={films[film]} imgUrl={film.imgUrl} linkTitle={film.title} /></Link>)
-                                            }
-                                        </Slider> : <Loader />
-                                }
+                        <div className='all-related-carousels-parent flex'>
+                            <div className='carousel-parent'>
+                                <h2>Related Characters</h2>
+                                <div className='releted-cards'>
+                                    {
+                                        chars.length > 0 ?
+                                            <Slider {...settings}>
+                                                {
+                                                    chars && chars.map(char => <Link to={`/characters/${char.imgId}`}><RelatedLinks key={chars[char]} imgUrl={char.imgUrl} linkTitle={char.title} /></Link>)
+                                                }
+                                            </Slider> : <Loader />
+                                    }
+                                </div>
+                            </div>
+                            <div className='carousel-parent'>
+                                <h2>Related Films</h2>
+                                <div className='releted-cards'>
+                                    {
+                                        films.length > 0 ?
+                                            <Slider {...settings}>
+                                                {
+                                                    films && films.map(film => <Link to={`/films/${film.imgId}`} ><RelatedLinks key={films[film]} imgUrl={film.imgUrl} linkTitle={film.title} /></Link>)
+                                                }
+                                            </Slider> : <Loader />
+                                    }
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
             }
         </div>
     )
 }
+
+const mapStateToProps = (state, ownProps) => {
+    return {
+        speciesData: state.species
+    }
+}
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        fetchSpecie: () => dispatch(fetchSpecies(speciesId))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SpeciesDetails)

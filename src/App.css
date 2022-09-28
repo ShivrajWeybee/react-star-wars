@@ -8,7 +8,8 @@
 
 body {
   color: whitesmoke;
-  background-color: black;
+  /* background-color: black; */
+  background-image: url(./img/Noise.jpg);
   font-family: 'Russo One', sans-serif;
 }
 
@@ -66,6 +67,11 @@ body {
   width: 100%;
 }
 
+.main-link:hover .main-link_info{
+  background-color: rgba(0, 0, 0, 0.336);
+  transition: 0.24s ease-in-out;
+}
+
 .main-link .main-link_info {
   position: absolute;
   top: 0;
@@ -91,6 +97,7 @@ body {
 
 .char-link_card {
   position: relative;
+  transition: 0.14s ease-in-out;
 }
 /* .char-link_img-container {
   border-radius: 10px 10px 0 0;
@@ -112,6 +119,9 @@ body {
   font-size: 18px;
   padding: 20px 0;
   text-align: center;
+}
+.char-link_card:hover {
+  scale: 1.05;
 }
 
 

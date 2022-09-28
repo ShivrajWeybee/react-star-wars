@@ -3,22 +3,31 @@ import { Link, useParams } from 'react-router-dom'
 import axios from 'axios'
 import { RelatedLinks } from '../relatedLinks/RelatedLinks'
 import { Loader } from '../Loader';
+import { FETCH_FILM_REUEST, FETCH_FILM_SUCCESS, FETCH_FILM_FAILURE } from '../../redux/types';
 
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { NavigationBar } from '../NavigationBar';
+import { fetchFilms } from './filmAction';
+import { connect } from 'react-redux';
 
-export const FilmDetails = () => {
+let filmId;
+
+function FilmDetails(props) {
 
     const params = useParams()
-    const filmId = params.filmId
+    filmId = params.filmsId
     const [data, setData] = useState({})
     const [chars, setChar] = useState([])
     const [vehicles, setVehicles] = useState([])
     const [starships, setStarships] = useState([])
     const [planets, setPlanets] = useState([])
     const [species, setSpecies] = useState([])
+
+    useEffect(() => {
+        props.fetchFilm()
+    })
 
     useEffect(() => {
         axios
@@ -104,16 +113,16 @@ export const FilmDetails = () => {
         <div>
             <NavigationBar />
             {
-                data ?
+                props.FilmData.users.loading ? <Loader /> :
                     <div className='detailpage-container'>
                         <div className='details_info-container flex'>
                             <img src={`https://starwars-visualguide.com/assets/img/films/${filmId}.jpg`} alt='movie poster' />
                             <div className='details_info'>
-                                <p className='title'>Title - {data.title}</p>
-                                <p>Date created - {data.release_date}</p>
-                                <p>Director - {data.director}</p>
-                                <p>Producer - {data.producer}</p>
-                                <p>Opening Crawl - {data.opening_crawl}</p>
+                                <p className='title'>{props.FilmData.users.title}</p>
+                                <p>Date created - {props.FilmData.users.release_date}</p>
+                                <p>Director - {props.FilmData.users.director}</p>
+                                <p>Producer - {props.FilmData.users.producer}</p>
+                                <p>Opening Crawl - {props.FilmData.users.opening_crawl}</p>
                             </div>
                         </div>
                         <div className='all-related-carousels-parent'>
@@ -124,7 +133,7 @@ export const FilmDetails = () => {
                                         chars.length > 0 ?
                                             <Slider {...settings}>
                                                 {
-                                                    chars.map((char, index) => { return (<Link key={index} to={`/character/${char.imgId}`}><RelatedLinks imgUrl={char.imgUrl} linkTitle={char.title} /></Link>) })
+                                                    chars.map((char, index) => { return (<Link key={index} to={`/characters/${char.imgId}`}><RelatedLinks imgUrl={char.imgUrl} linkTitle={char.title} /></Link>) })
                                                 }
                                             </Slider> : <Loader />
                                     }
@@ -184,8 +193,22 @@ export const FilmDetails = () => {
                             </div>
                         </div>
                     </div>
-                    : <Loader />
             }
         </div>
     )
 }
+
+const mapStateToProps = (state, ownProps) => {
+    return {
+        FilmData: state.film
+    }
+}
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        fetchFilm: () => dispatch(fetchFilms(filmId))
+    }
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(FilmDetails)

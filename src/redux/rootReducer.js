@@ -1,35 +1,21 @@
-import { FETCH_USERS_FAILURE, FETCH_USERS_REUEST, FETCH_USERS_SUCCESS } from "./userTypes"
+import { combineReducers } from "redux";
 
-const initialState = {
-    loading: false,
-    error: '',
-    users: []
-}
+import charReducer from "../components/Characters/charReducer";
+import filmReducer from "../components/Films/filmReducer";
+import planetReducer from "../components/Planets/planetReducer";
+import speciesReducer from "../components/Species/speciesReducer";
+import starshipReducer from "../components/Starships/starshipReducer";
+import vehicleReducer from "../components/Vehicles/vehicleReducer";
+import commanReducer from "./commanreducer";
 
-const reducer = (state = initialState, action) => {
-    switch (action.type) {
-        case FETCH_USERS_REUEST:
-            return {
-                ...state,
-                loading: true,
-            }
+const rootReducer = combineReducers({
+    char: charReducer,
+    film: filmReducer,
+    planet: planetReducer,
+    species: speciesReducer,
+    starship: starshipReducer,
+    vehicle: vehicleReducer,
+    comman: commanReducer,
+})
 
-        case FETCH_USERS_SUCCESS:
-            return {
-                loading: false,
-                users: action.payload,
-                error: '',
-            }
-
-        case FETCH_USERS_FAILURE:
-            return {
-                loading: false,
-                users: [],
-                error: action.payload,
-            }
-
-        default: return state
-    }
-}
-
-export default reducer
+export default rootReducer

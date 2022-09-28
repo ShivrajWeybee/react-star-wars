@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import axios from 'axios'
-import { RelatedLinks } from '../relatedLinks/RelatedLinks'
 import { Loader } from '../Loader'
+import { RelatedLinks } from '../relatedLinks/RelatedLinks'
 
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { NavigationBar } from '../NavigationBar'
+import { fetchPlanets } from './planetAction'
+import { connect } from 'react-redux'
 
-export const PlanetsDetails = () => {
+let planetId;
+
+function PlanetsDetails(props) {
     const params = useParams()
-    const planetId = params.planetId
+    planetId = params.planetsId
     const [data, setData] = useState({})
     const [films, setFilms] = useState([])
     const [residents, setResidents] = useState([])
@@ -20,12 +24,14 @@ export const PlanetsDetails = () => {
         axios
             .get(`https://swapi.dev/api/planets/${planetId}`)
             .then(res => {
+                console.log(res.data)
                 setData(res.data)
             })
             .catch(err => {
                 console.log(err);
             })
     }, [planetId])
+
 
     useEffect(() => {
         data.films && data.films.forEach(element => {
@@ -60,24 +66,28 @@ export const PlanetsDetails = () => {
         variableWidth: true
     };
 
+    useEffect(() => {
+        props.fetchPlanet()
+    })
+
     return (
         <div>
             <NavigationBar />
             {
-                data ?
+                props.planetData.loading ? <Loader /> :
                     <div className='detailpage-container'>
                         <div className='details_info-container flex'>
                             <img src={`https://starwars-visualguide.com/assets/img/planets/${planetId}.jpg`} alt='planet' />
                             <div className='details_info'>
-                                <p className='title'>{data.name}</p>
-                                <p>{data.population}</p>
-                                <p>{data.rotation_period} days</p>
-                                <p>{data.orbital_period} days</p>
-                                <p>{data.diameter} km</p>
-                                <p>{data.gravity}</p>
-                                <p>{data.terrain}</p>
-                                <p>{data.surface_water}%</p>
-                                <p>{data.climate}</p>
+                                <p className='title'>{props.planetData.users.name}</p>
+                                <p>{props.planetData.population}</p>
+                                <p>{props.planetData.users.rotation_period} days</p>
+                                <p>{props.planetData.users.orbital_period} days</p>
+                                <p>{props.planetData.users.diameter} km</p>
+                                <p>{props.planetData.users.gravity}</p>
+                                <p>{props.planetData.users.terrain}</p>
+                                <p>{props.planetData.users.surface_water}%</p>
+                                <p>{props.planetData.users.climate}</p>
                             </div>
                         </div>
                         <div className='all-related-carousels-parent flex'>
@@ -101,7 +111,7 @@ export const PlanetsDetails = () => {
                                         residents.length > 0 ?
                                             <Slider {...settings}>
                                                 {
-                                                    residents.map(resident => <Link to={`/character/${resident.imgId}`}><RelatedLinks key={residents[resident]} imgUrl={resident.imgUrl} linkTitle={resident.name} /></Link>)
+                                                    residents.map((resident, index) => <Link key={index} to={`/characters/${resident.imgId}`}><RelatedLinks imgUrl={resident.imgUrl} linkTitle={resident.title} /></Link>)
                                                 }
                                             </Slider> : <Loader />
                                     }
@@ -109,8 +119,21 @@ export const PlanetsDetails = () => {
                             </div>
                         </div>
                     </div>
-                    : <Loader />
             }
         </div>
     )
 }
+
+const mapStateToProps = (state, ownProps) => {
+    return {
+        planetData: state.planet
+    }
+}
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        fetchPlanet: () => dispatch(fetchPlanets(planetId))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(PlanetsDetails)

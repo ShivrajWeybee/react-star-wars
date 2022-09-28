@@ -8,13 +8,21 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { NavigationBar } from '../NavigationBar'
+import { fetchVehicles } from './vehicleAction'
+import { connect } from 'react-redux'
 
-export const VehiclesDetails = () => {
+let vehicleId;
+
+function VehiclesDetails(props) {
     const params = useParams()
-    const vehicleId = params.vehicleId
+    vehicleId = params.vehiclesId
     const [data, setData] = useState({})
     const [films, setFilms] = useState([])
     // const [pilot, setPilot] = useState([])
+
+    useEffect(() => {
+        props.fetchVehicle()
+    })
 
     useEffect(() => {
         axios
@@ -52,38 +60,38 @@ export const VehiclesDetails = () => {
         <div>
             <NavigationBar />
             {
-                data &&
-                <div className='detailpage-container'>
-                    <div className='details_info-container flex'>
-                        <img src={`https://starwars-visualguide.com/assets/img/vehicles/${vehicleId}.jpg`} alt='movie poster' />
-                        <div className='details_info'>
-                            <p className='title'>{data.name}</p>
-                            <p>{data.model}</p>
-                            <p>{data.manufacturer}</p>
-                            <p>{data.vehicle_class}</p>
-                            <p>{data.cost_in_credits}</p>
-                            <p>{data.max_atmosphering_speed} km/h</p>
-                            <p>{data.length}</p>
-                            <p>{data.cargo_capacity}</p>
-                            <p>{data.crew}</p>
-                            <p>{data.passengers}</p>
-                        </div>
-                    </div>
-                    <div className='all-related-carousels-parent flex'>
-                        <div className='carousel-parent'>
-                            <h2>Related Films</h2>
-                            <div className='releted-cards'>
-                                {
-                                    films.length > 0 ?
-                                        <Slider {...settings}>
-                                            {
-                                                films && films.map(film => <Link to={`/films/${film.imgId}`} ><RelatedLinks key={films[film]} imgUrl={film.imgUrl} linkTitle={film.title} /></Link>)
-                                            }
-                                        </Slider> : <Loader />
-                                }
+                props.vehicleData.loading ? <Loader /> :
+                    <div className='detailpage-container'>
+                        <div className='details_info-container flex'>
+                            <img src={`https://starwars-visualguide.com/assets/img/vehicles/${vehicleId}.jpg`} alt='movie poster' />
+                            <div className='details_info'>
+                                <p className='title'>{props.vehicleData.users.name}</p>
+                                <p>{props.vehicleData.users.model}</p>
+                                <p>{props.vehicleData.users.manufacturer}</p>
+                                <p>{props.vehicleData.users.vehicle_class}</p>
+                                <p>{props.vehicleData.users.cost_in_credits}</p>
+                                <p>{props.vehicleData.users.max_atmosphering_speed} km/h</p>
+                                <p>{props.vehicleData.users.length}</p>
+                                <p>{props.vehicleData.users.cargo_capacity}</p>
+                                <p>{props.vehicleData.users.crew}</p>
+                                <p>{props.vehicleData.users.passengers}</p>
                             </div>
                         </div>
-                        {/* <div className='carousel-parent'>
+                        <div className='all-related-carousels-parent flex'>
+                            <div className='carousel-parent'>
+                                <h2>Related Films</h2>
+                                <div className='releted-cards'>
+                                    {
+                                        films.length > 0 ?
+                                            <Slider {...settings}>
+                                                {
+                                                    films && films.map(film => <Link to={`/films/${film.imgId}`} ><RelatedLinks key={films[film]} imgUrl={film.imgUrl} linkTitle={film.title} /></Link>)
+                                                }
+                                            </Slider> : <Loader />
+                                    }
+                                </div>
+                            </div>
+                            {/* <div className='carousel-parent'>
                             <h2>Related Films</h2>
                             <div className='releted-cards'>
                                 {
@@ -96,9 +104,23 @@ export const VehiclesDetails = () => {
                                 }
                             </div>
                         </div> */}
+                        </div>
                     </div>
-                </div>
             }
         </div>
     )
 }
+
+const mapStateToProps = (state, ownProps) => {
+    return {
+        vehicleData: state.vehicle,
+    }
+}
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        fetchVehicle: () => dispatch(fetchVehicles(vehicleId))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(VehiclesDetails)

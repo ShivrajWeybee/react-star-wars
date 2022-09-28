@@ -10,7 +10,7 @@ export const Home = () => {
             {/* <img className='home_logo' src='https://freepngimg.com/thumb/star_wars/22994-5-star-wars-logo-image.png' alt='logo' /> */}
             <NavigationBar nlink='home' />
             <nav>
-                <NavLink className="home_links" to="/character">{<MainLink imgURL='https://starwars-visualguide.com/assets/img/categories/character.jpg' linkName='Characters' />}</NavLink>
+                <NavLink className="home_links" to="/characters">{<MainLink imgURL='https://starwars-visualguide.com/assets/img/categories/character.jpg' linkName='Characters' />}</NavLink>
                 <NavLink className="home_links" to="/films">{<MainLink imgURL='https://starwars-visualguide.com/assets/img/categories/films.jpg' linkName='Films' />}</NavLink>
                 <NavLink className="home_links" to="/species">{<MainLink imgURL='https://starwars-visualguide.com/assets/img/categories/species.jpg' linkName='Species' />}</NavLink>
                 <NavLink className="home_links" to="/starships">{<MainLink imgURL='https://starwars-visualguide.com/assets/img/categories/starships.jpg' linkName='Starships' />}</NavLink>

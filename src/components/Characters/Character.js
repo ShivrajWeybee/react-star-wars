@@ -1,35 +1,53 @@
-import React, { useEffect, useState, useMemo } from 'react'
-import axios from 'axios'
+import React, { useEffect, useState } from 'react'
 import { Link, Outlet, useParams } from 'react-router-dom'
 import { CharLink } from './CharLink'
 import { Loader } from '../Loader'
+import { connect } from 'react-redux'
+import { fetchApis } from '../../redux/commanTypes'
 
-export const Character = () => {
+function Character(props) {
 
     const param = useParams()
-    const [data, setData] = useState([])
+    const [page, setPage] = useState(0)
 
     useEffect(() => {
-        axios
-            .get('https://swapi.dev/api/people/')
-            .then(res => {
-                setData(res.data.results)
-            })
-            .catch(err => {
-                console.log(err);
-            })
+        props.fetchApi()
     }, [])
 
-    if (param.hasOwnProperty('characterId') === true) return <Outlet />
+    if (param.hasOwnProperty(`${props.categoryType.categoryType}Id`) === true) return <Outlet />
 
     return (
-        <div className='character-display_container'>
-            {
-                data.length > 0 ? data.map(i => <div>
-                    <Link key={i.name} to={`/character/${i.url.split('/').at(-2)}`}>{<CharLink charId={i} type='characters' />}</Link>
-                </div>) : <Loader />
-            }
-            {/* <Outlet /> */}
+        <div>
+            <div>
+                <select>
+                    <option></option>
+                </select>
+            </div>
+            <div className='character-display_container'>
+                {
+                    props.apiData.loading ? <Loader /> :
+                        props.apiData.apiData.results.map((i, index) => <div key={index}>
+                            <Link to={`/${props.categoryType.categoryType}/${i.url.split('/').at(-2)}`}>{<CharLink charId={i} type={props.categoryType.categoryType} />}</Link>
+                        </div>)
+                }
+            </div>
         </div>
     )
 }
+
+const mapStateToProps = (state, ownProps) => {
+    return {
+        apiData: state.comman,
+        categoryType: ownProps
+    }
+}
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+    const types = ownProps.categoryType === 'characters' ? 'people' : ownProps.categoryType
+    console.log(types)
+    return {
+        fetchApi: () => dispatch(fetchApis(types))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Character)
