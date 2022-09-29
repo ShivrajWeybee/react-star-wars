@@ -1,4 +1,4 @@
-import { FETCH_CHAR_FAILURE, FETCH_CHAR_REUEST, FETCH_CHAR_SUCCESS } from "../../redux/types"
+import { FETCH_CHAR_FAILURE, FETCH_CHAR_REUEST, FETCH_CHAR_SUCCESS, FETCH_CHAR_RELATED } from "../../redux/types"
 import axios from 'axios'
 
 export const fetchCharRequest = () => {
@@ -21,6 +21,13 @@ export const fetchCharFailure = (error) => {
     }
 }
 
+export const fetchCharRelated = (relatedData) => {
+    return {
+        type: FETCH_CHAR_RELATED,
+        payload: relatedData
+    }
+}
+
 export const fetchUsers = (charId) => {
     return (dispatch) => {
         dispatch(fetchCharRequest)
@@ -29,6 +36,7 @@ export const fetchUsers = (charId) => {
             .then(res => {
                 const users = res.data
                 dispatch(fetchCharSuccess(users))
+                dispatch(fetchCharRelated(users))
             })
             .catch(error => {
                 const errMsg = error.message

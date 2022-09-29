@@ -1,9 +1,10 @@
-import { FETCH_STARSHIP_FAILURE, FETCH_STARSHIP_REUEST, FETCH_STARSHIP_SUCCESS } from "../../redux/types"
+import { FETCH_STARSHIP_FAILURE, FETCH_STARSHIP_RELATED, FETCH_STARSHIP_REUEST, FETCH_STARSHIP_SUCCESS } from "../../redux/types"
 
 const initialState = {
     loading: true,
     error: '',
-    users: []
+    users: [],
+    related: [],
 }
 
 const starshipReducer = (state = initialState, action) => {
@@ -16,6 +17,7 @@ const starshipReducer = (state = initialState, action) => {
 
         case FETCH_STARSHIP_SUCCESS:
             return {
+                ...state,
                 loading: false,
                 users: action.payload,
                 error: '',
@@ -23,9 +25,17 @@ const starshipReducer = (state = initialState, action) => {
 
         case FETCH_STARSHIP_FAILURE:
             return {
+                ...state,
                 loading: false,
                 users: [],
                 error: action.payload,
+            }
+
+        case FETCH_STARSHIP_RELATED:
+            return {
+                ...state,
+                loading: false,
+                related: [...state.related, action.payload]
             }
 
         default: return state

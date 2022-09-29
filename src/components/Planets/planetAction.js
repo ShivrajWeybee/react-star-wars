@@ -1,4 +1,4 @@
-import { FETCH_PLANET_FAILURE, FETCH_PLANET_REUEST, FETCH_PLANET_SUCCESS } from "../../redux/types"
+import { FETCH_PLANET_FAILURE, FETCH_PLANET_REUEST, FETCH_PLANET_SUCCESS, FETCH_PLANET_RELATED } from "../../redux/types"
 import axios from 'axios'
 
 export const fetchPlanetRequest = () => {
@@ -21,6 +21,13 @@ export const fetchPlanetFailure = (error) => {
     }
 }
 
+export const fetchPlanetRelated = (relatedData) => {
+    return {
+        type: FETCH_PLANET_RELATED,
+        payload: relatedData,
+    }
+}
+
 export const fetchPlanets = (planetId) => {
     return (dispatch) => {
         dispatch(fetchPlanetRequest)
@@ -29,6 +36,7 @@ export const fetchPlanets = (planetId) => {
             .then(res => {
                 const users = res.data
                 dispatch(fetchPlanetSuccess(users))
+                dispatch(fetchPlanetRelated(users))
             })
             .catch(error => {
                 const errMsg = error.message

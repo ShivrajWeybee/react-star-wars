@@ -1,4 +1,4 @@
-import { FETCH_VEHICLE_FAILURE, FETCH_VEHICLE_REUEST, FETCH_VEHICLE_SUCCESS } from "../../redux/types"
+import { FETCH_VEHICLE_FAILURE, FETCH_VEHICLE_RELATED, FETCH_VEHICLE_REUEST, FETCH_VEHICLE_SUCCESS } from "../../redux/types"
 import axios from 'axios'
 
 export const fetchVehicleRequest = () => {
@@ -21,6 +21,13 @@ export const fetchVehicleFailure = (error) => {
     }
 }
 
+export const fetchVehicleRelated = (users) => {
+    return {
+        type: FETCH_VEHICLE_RELATED,
+        payload: users,
+    }
+}
+
 export const fetchVehicles = (vehicleId) => {
     return (dispatch) => {
         dispatch(fetchVehicleRequest)
@@ -29,6 +36,7 @@ export const fetchVehicles = (vehicleId) => {
             .then(res => {
                 const users = res.data
                 dispatch(fetchVehicleSuccess(users))
+                dispatch(fetchVehicleRelated(users))
             })
             .catch(error => {
                 const errMsg = error.message

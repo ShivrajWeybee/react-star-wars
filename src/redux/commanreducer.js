@@ -3,7 +3,9 @@ import { FETCH_API_REUEST, FETCH_API_SUCCESS, FETCH_API_FAILURE } from "./types"
 const initialState = {
     loading: true,
     apiData: [],
+    charData: [],
     error: '',
+    page: 1,
 }
 
 const commanReducer = (state = initialState, action) => {
@@ -11,7 +13,7 @@ const commanReducer = (state = initialState, action) => {
         case FETCH_API_REUEST:
             return {
                 ...state,
-                loading: false,
+                loading: true,
             }
 
         case FETCH_API_SUCCESS:
@@ -19,6 +21,7 @@ const commanReducer = (state = initialState, action) => {
                 loading: false,
                 apiData: action.payload,
                 error: '',
+                page: action.page
             }
 
         case FETCH_API_FAILURE:

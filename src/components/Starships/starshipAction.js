@@ -1,4 +1,4 @@
-import { FETCH_STARSHIP_FAILURE, FETCH_STARSHIP_REUEST, FETCH_STARSHIP_SUCCESS } from "../../redux/types"
+import { FETCH_STARSHIP_FAILURE, FETCH_STARSHIP_REUEST, FETCH_STARSHIP_SUCCESS, FETCH_STARSHIP_RELATED } from "../../redux/types"
 import axios from 'axios'
 
 export const fetchStarshipRequest = () => {
@@ -21,6 +21,13 @@ export const fetchStarshipFailure = (error) => {
     }
 }
 
+export const fetchStarshipRelated = (relatedData) => {
+    return {
+        type: FETCH_STARSHIP_RELATED,
+        payload: relatedData,
+    }
+}
+
 export const fetchStarships = (starshipId) => {
     return (dispatch) => {
         dispatch(fetchStarshipRequest)
@@ -29,6 +36,7 @@ export const fetchStarships = (starshipId) => {
             .then(res => {
                 const users = res.data
                 dispatch(fetchStarshipSuccess(users))
+                dispatch(fetchStarshipRelated(users))
             })
             .catch(error => {
                 const errMsg = error.message

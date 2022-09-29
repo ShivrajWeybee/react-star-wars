@@ -1,9 +1,10 @@
-import { FETCH_CHAR_FAILURE, FETCH_CHAR_REUEST, FETCH_CHAR_SUCCESS } from "../../redux/types"
+import { FETCH_CHAR_FAILURE, FETCH_CHAR_REUEST, FETCH_CHAR_SUCCESS, FETCH_CHAR_RELATED } from "../../redux/types"
 
 const initialState = {
     loading: true,
     error: '',
-    users: []
+    users: [],
+    related: []
 }
 
 const reducer = (state = initialState, action) => {
@@ -16,6 +17,7 @@ const reducer = (state = initialState, action) => {
 
         case FETCH_CHAR_SUCCESS:
             return {
+                ...state,
                 loading: false,
                 users: action.payload,
                 error: '',
@@ -23,9 +25,17 @@ const reducer = (state = initialState, action) => {
 
         case FETCH_CHAR_FAILURE:
             return {
+                ...state,
                 loading: false,
                 users: [],
                 error: action.payload,
+            }
+
+        case FETCH_CHAR_RELATED:
+            return {
+                ...state,
+                loading: false,
+                related: [...state.related, action.payload]
             }
 
         default: return state

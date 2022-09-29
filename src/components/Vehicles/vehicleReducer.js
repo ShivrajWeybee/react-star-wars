@@ -1,9 +1,10 @@
-import { FETCH_VEHICLE_FAILURE, FETCH_VEHICLE_REUEST, FETCH_VEHICLE_SUCCESS } from "../../redux/types"
+import { FETCH_VEHICLE_FAILURE, FETCH_VEHICLE_REUEST, FETCH_VEHICLE_SUCCESS, FETCH_VEHICLE_RELATED } from "../../redux/types"
 
 const initialState = {
     loading: true,
     error: '',
-    users: []
+    users: [],
+    related: []
 }
 
 const vehicleReducer = (state = initialState, action) => {
@@ -16,6 +17,7 @@ const vehicleReducer = (state = initialState, action) => {
 
         case FETCH_VEHICLE_SUCCESS:
             return {
+                ...state,
                 loading: false,
                 users: action.payload,
                 error: '',
@@ -23,9 +25,18 @@ const vehicleReducer = (state = initialState, action) => {
 
         case FETCH_VEHICLE_FAILURE:
             return {
+                ...state,
                 loading: false,
                 users: [],
                 error: action.payload,
+            }
+
+        case FETCH_VEHICLE_RELATED:
+            return {
+                ...state,
+                loading: false,
+                related: [...state.related, action.payload]
+
             }
 
         default: return state

@@ -1,9 +1,18 @@
 import React from 'react'
+import { connect, useSelector } from 'react-redux'
+import { fetchApis } from '../redux/commanActions'
 
-const Pagination = () => {
+function Pagination(props) {
+
     return (
-        <div>Pagination</div>
+        <option>{props.inputValue}</option>
     )
 }
 
-export default Pagination
+const mapStateToProps = (state, ownProps) => {
+    return {
+        page: state.comman,
+    }
+}
+
+export default connect(mapStateToProps)(Pagination)

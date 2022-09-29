@@ -11,6 +11,7 @@ export const fetchApiSuccess = (apiData) => {
     return {
         type: FETCH_API_SUCCESS,
         payload: apiData,
+        page: Math.floor(apiData.count / 10) + 1,
     }
 }
 
@@ -21,11 +22,12 @@ export const fetchApiFailure = (error) => {
     }
 }
 
-export const fetchApis = (category) => {
+export const fetchApis = (category, pageNo = 1) => {
+    console.log(category, pageNo)
     return (dispatch) => {
         dispatch(fetchApiRequest)
         axios
-            .get(`https://swapi.dev/api/${category}/`)
+            .get(`https://swapi.dev/api/${category}/?page=${pageNo}`)
             .then(res => {
                 const apiData = res.data;
                 const page = Math.floor(apiData.results.count / 10) + 1

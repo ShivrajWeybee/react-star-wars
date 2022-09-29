@@ -1,4 +1,4 @@
-import { FETCH_SPECIES_FAILURE, FETCH_SPECIES_REUEST, FETCH_SPECIES_SUCCESS } from "../../redux/types"
+import { FETCH_SPECIES_FAILURE, FETCH_SPECIES_REUEST, FETCH_SPECIES_SUCCESS, FETCH_SPECIES_RELATED } from "../../redux/types"
 import axios from 'axios'
 
 export const fetchSpeciesRequest = () => {
@@ -21,6 +21,13 @@ export const fetchSpeciesFailure = (error) => {
     }
 }
 
+export const fetchSpeciesRelated = (relatedData) => {
+    return {
+        type: FETCH_SPECIES_RELATED,
+        payload: relatedData
+    }
+}
+
 export const fetchSpecies = (speciesId) => {
     return (dispatch) => {
         dispatch(fetchSpeciesRequest)
@@ -29,6 +36,7 @@ export const fetchSpecies = (speciesId) => {
             .then(res => {
                 const users = res.data
                 dispatch(fetchSpeciesSuccess(users))
+                dispatch(fetchSpeciesRelated(users))
             })
             .catch(error => {
                 const errMsg = error.message

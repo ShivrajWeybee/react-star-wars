@@ -1,9 +1,10 @@
-import { FETCH_FILM_FAILURE, FETCH_FILM_REUEST, FETCH_FILM_SUCCESS } from "../../redux/types"
+import { FETCH_FILM_FAILURE, FETCH_FILM_REUEST, FETCH_FILM_SUCCESS, FETCH_FILM_RELATED } from "../../redux/types"
 
 const initialState = {
     loading: true,
     error: '',
-    users: []
+    users: [],
+    related: []
 }
 
 const reducer = (state = initialState, action) => {
@@ -16,6 +17,7 @@ const reducer = (state = initialState, action) => {
 
         case FETCH_FILM_SUCCESS:
             return {
+                ...state,
                 loading: false,
                 users: action.payload,
                 error: '',
@@ -23,9 +25,17 @@ const reducer = (state = initialState, action) => {
 
         case FETCH_FILM_FAILURE:
             return {
+                ...state,
                 loading: false,
                 users: [],
                 error: action.payload,
+            }
+
+        case FETCH_FILM_RELATED:
+            return {
+                ...state,
+                loading: false,
+                related: [...state.related, action.payload],
             }
 
         default: return state
