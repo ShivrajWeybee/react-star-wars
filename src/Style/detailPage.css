@@ -10,7 +10,7 @@
 .details_info-container {
     align-items: stretch;
     justify-content: flex-start;
-    height: 400px;
+    height: 420px;
     margin-bottom: 2rem;
     overflow: hidden;
     border-radius: 5px;
@@ -49,7 +49,7 @@
     object-fit: cover;
     max-height: 70px;
     min-height: 70px;
-    border-radius: 50%;
+    border-radius: 5px;
     transition: 0.14s ease-in-out;
   }
   .related-card-item p {
@@ -61,7 +61,6 @@
   }
   
   .carousel-parent {
-    /* background-color: rgb(61, 61, 61); */
     background-color: #2a2a2af0;
     margin-bottom: 2rem;
     /* width: 30%; */
@@ -69,6 +68,7 @@
     min-height: 250px;
     max-height: 250px;
     border-radius: 5px;
+    position: relative;
   }
   .carousel-parent h2 {
     margin-bottom: 1.2rem;

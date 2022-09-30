@@ -92,15 +92,15 @@ function SpeciesDetails(props) {
                         <div className='details_info-container flex'>
                             <img src={`https://starwars-visualguide.com/assets/img/species/${speciesId}.jpg`} alt='movie poster' />
                             <div className='details_info'>
-                                <p className='title'>{props.speciesData.species.users.name}</p>
-                                <p>{props.speciesData.species.users.classification}</p>
-                                <p>{props.speciesData.species.users.designation}</p>
-                                <p>{props.speciesData.species.users.language}</p>
-                                <p>{props.speciesData.species.users.average_lifespan}</p>
-                                <p>{props.speciesData.species.users.average_height}</p>
-                                <p>{props.speciesData.species.users.hair_colors}</p>
-                                <p>{props.speciesData.species.users.skin_colors}</p>
-                                <p>{props.speciesData.species.users.eye_colors}</p>
+                                <p className='title'>{props.speciesData.species.users.name || 'unknown'}</p>
+                                <p>classification - {props.speciesData.species.users.classification || 'unknown'}</p>
+                                <p>Designation -{props.speciesData.species.users.designation || 'unknown'}</p>
+                                <p>Language - {props.speciesData.species.users.language || 'unknown'}</p>
+                                <p>Avg Lifespan - {props.speciesData.species.users.average_lifespan || 'unknown'}</p>
+                                <p>Avg Height - {props.speciesData.species.users.average_height || 'unknown'}</p>
+                                <p>Hair Colors - {props.speciesData.species.users.hair_colors || 'unknown'}</p>
+                                <p>Skin Color - {props.speciesData.species.users.skin_colors || 'unknown'}</p>
+                                <p>Eye Color - {props.speciesData.species.users.eye_colors || 'unknown'}</p>
                             </div>
                         </div>
                         <div className='all-related-carousels-parent flex'>
@@ -108,21 +108,22 @@ function SpeciesDetails(props) {
                                 <h2>Related Characters</h2>
                                 <div className='releted-cards'>
                                     {
-                                        props.speciesData.film.related ?
-                                            <Slider {...settings}>
-                                                {
-                                                    props.speciesData.film.related && props.speciesData.film.related.map((film, index) =>
-                                                        <Link
-                                                            key={index}
-                                                            to={`/films/${film.url.split('/').at(-2)}`}
-                                                        >
-                                                            <RelatedLinks
-                                                                imgUrl={`https://starwars-visualguide.com/assets/img/films/${film.url.split('/').at(-2)}.jpg`}
-                                                                linkTitle={film.title}
-                                                            />
-                                                        </Link>)
-                                                }
-                                            </Slider> : <Loader />
+                                        props.speciesData.film.related.length === 0 ? "There are no related items for this category" :
+                                            props.speciesData.film.related ?
+                                                <Slider {...settings}>
+                                                    {
+                                                        props.speciesData.film.related && props.speciesData.film.related.map((film, index) =>
+                                                            <Link
+                                                                key={index}
+                                                                to={`/films/${film.url.split('/').at(-2)}`}
+                                                            >
+                                                                <RelatedLinks
+                                                                    imgUrl={`https://starwars-visualguide.com/assets/img/films/${film.url.split('/').at(-2)}.jpg`}
+                                                                    linkTitle={film.title}
+                                                                />
+                                                            </Link>)
+                                                    }
+                                                </Slider> : <Loader />
                                     }
                                 </div>
                             </div>
@@ -130,21 +131,22 @@ function SpeciesDetails(props) {
                                 <h2>Related Characters</h2>
                                 <div className='releted-cards'>
                                     {
-                                        props.speciesData.char.related ?
-                                            <Slider {...settings}>
-                                                {
-                                                    props.speciesData.char.related && props.speciesData.char.related.map((char, index) =>
-                                                        <Link
-                                                            key={index}
-                                                            to={`/characters/${char.url.split('/').at(-2)}`}
-                                                        >
-                                                            <RelatedLinks
-                                                                imgUrl={`https://starwars-visualguide.com/assets/img/characters/${char.url.split('/').at(-2)}.jpg`}
-                                                                linkTitle={char.name}
-                                                            />
-                                                        </Link>)
-                                                }
-                                            </Slider> : <Loader />
+                                        props.speciesData.char.related.length === 0 ? "There are no related items for this category" :
+                                            props.speciesData.char.related ?
+                                                <Slider {...settings}>
+                                                    {
+                                                        props.speciesData.char.related && props.speciesData.char.related.map((char, index) =>
+                                                            <Link
+                                                                key={index}
+                                                                to={`/characters/${char.url.split('/').at(-2)}`}
+                                                            >
+                                                                <RelatedLinks
+                                                                    imgUrl={`https://starwars-visualguide.com/assets/img/characters/${char.url.split('/').at(-2)}.jpg`}
+                                                                    linkTitle={char.name}
+                                                                />
+                                                            </Link>)
+                                                    }
+                                                </Slider> : <Loader />
                                     }
                                 </div>
                             </div>

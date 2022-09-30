@@ -1,4 +1,4 @@
-import { FETCH_FILM_FAILURE, FETCH_FILM_REUEST, FETCH_FILM_SUCCESS, FETCH_FILM_RELATED } from "../../redux/types"
+import { FETCH_FILM_FAILURE, FETCH_FILM_REUEST, FETCH_FILM_SUCCESS, FETCH_FILM_RELATED, EMPTY_FILM_RELATED } from "../../redux/types"
 
 const initialState = {
     loading: true,
@@ -36,6 +36,12 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 loading: false,
                 related: [...state.related, action.payload],
+            }
+
+        case EMPTY_FILM_RELATED:
+            return {
+                ...state,
+                related: [],
             }
 
         default: return state

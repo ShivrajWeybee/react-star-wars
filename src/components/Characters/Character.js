@@ -15,13 +15,16 @@ function Character(props) {
     }
 
     const handlePrevious = () => {
+        if (Number(searchParam.get('page')) === 1 || !searchParam.get('page')) return
         console.log(Number(searchParam.get('page')))
         setSearchParam({ page: Number(searchParam.get('page')) - 1 })
     }
 
     const handleNext = () => {
+        if (!searchParam.get('page')) setSearchParam({ page: 1 })
+        if (Number(searchParam.get('page')) === Number(props.apiData.page)) return
         console.log(Number(searchParam.get('page')))
-        setSearchParam({ page: Number(searchParam.get('page')) + 1 })
+        setSearchParam({ page: !searchParam.get('page') ? Number(searchParam.get('page')) + 2 : Number(searchParam.get('page')) + 1 })
     }
 
     useEffect(() => {
@@ -34,13 +37,13 @@ function Character(props) {
         <div>
             <div>
                 <div className='flex pagination'>
-                    <button onClick={handlePrevious} disabled={Number(searchParam.get('page')) ? Number(searchParam.get('page')) : 1 === 1}>&lt;</button>
+                    <button onClick={handlePrevious} >&lt;</button>
                     <select onChange={handleChange}>
                         {
                             [...Array(Number(props.apiData.page))].map((x, i) => <option selected={(i + 1) === Number(searchParam.get('page')) ? Number(searchParam.get('page')) : 0} key={i} value={i + 1}>{i + 1}</option>)
                         }
                     </select>
-                    <button onClick={handleNext} disabled={Number(searchParam.get('page')) ? Number(searchParam.get('page')) : props.apiData === Number(props.apiData.page)}>&gt;</button>
+                    <button onClick={handleNext} >&gt;</button>
                 </div>
             </div>
             <div className='character-display_container'>
@@ -51,7 +54,7 @@ function Character(props) {
                         </div>)
                 }
             </div>
-        </div>
+        </div >
     )
 }
 

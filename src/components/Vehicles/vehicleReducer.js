@@ -1,4 +1,4 @@
-import { FETCH_VEHICLE_FAILURE, FETCH_VEHICLE_REUEST, FETCH_VEHICLE_SUCCESS, FETCH_VEHICLE_RELATED } from "../../redux/types"
+import { FETCH_VEHICLE_FAILURE, FETCH_VEHICLE_REUEST, FETCH_VEHICLE_SUCCESS, FETCH_VEHICLE_RELATED, EMPTY_VEHICLE_RELATED } from "../../redux/types"
 
 const initialState = {
     loading: true,
@@ -37,6 +37,12 @@ const vehicleReducer = (state = initialState, action) => {
                 loading: false,
                 related: [...state.related, action.payload]
 
+            }
+
+        case EMPTY_VEHICLE_RELATED:
+            return {
+                ...state,
+                related: [],
             }
 
         default: return state

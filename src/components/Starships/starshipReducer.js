@@ -1,4 +1,4 @@
-import { FETCH_STARSHIP_FAILURE, FETCH_STARSHIP_RELATED, FETCH_STARSHIP_REUEST, FETCH_STARSHIP_SUCCESS } from "../../redux/types"
+import { FETCH_STARSHIP_FAILURE, FETCH_STARSHIP_RELATED, FETCH_STARSHIP_REUEST, FETCH_STARSHIP_SUCCESS, EMPTY_STARSHIP_RELATED } from "../../redux/types"
 
 const initialState = {
     loading: true,
@@ -36,6 +36,12 @@ const starshipReducer = (state = initialState, action) => {
                 ...state,
                 loading: false,
                 related: [...state.related, action.payload]
+            }
+
+        case EMPTY_STARSHIP_RELATED:
+            return {
+                ...state,
+                related: [],
             }
 
         default: return state

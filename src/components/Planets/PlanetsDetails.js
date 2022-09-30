@@ -18,52 +18,7 @@ function PlanetsDetails(props) {
     const params = useParams()
     planetId = params.planetsId
 
-    const rfilms = useSelector(state => state.planet.users.films)
-    const dispatchFilm = useDispatch()
-    useEffect(() => {
-        rfilms?.forEach(film => dispatchFilm(fetchFilms(film.split('/').at(-2))))
-    }, [rfilms])
-
-    const [data, setData] = useState({})
-    const [films, setFilms] = useState([])
-    const [residents, setResidents] = useState([])
-
-    useEffect(() => {
-        axios
-            .get(`https://swapi.dev/api/planets/${planetId}`)
-            .then(res => {
-                console.log(res.data)
-                setData(res.data)
-            })
-            .catch(err => {
-                console.log(err);
-            })
-    }, [planetId])
-
-
-    useEffect(() => {
-        data.films && data.films.forEach(element => {
-            axios
-                .get(element)
-                .then(res => {
-                    const imgId = res.data.url.split('/')
-                    setFilms(films => [...films, { title: res.data.title, imgUrl: `https://starwars-visualguide.com/assets/img/films/${imgId[imgId.length - 2]}.jpg`, imgId: `${imgId[imgId.length - 2]}` }])
-                })
-                .catch(err => console.log(err))
-        });
-    }, [data.films])
-
-    useEffect(() => {
-        data.residents && data.residents.forEach(element => {
-            axios
-                .get(element)
-                .then(res => {
-                    const imgId = res.data.url.split('/')
-                    setResidents(residents => [...residents, { title: res.data.name, imgUrl: `https://starwars-visualguide.com/assets/img/characters/${imgId[imgId.length - 2]}.jpg`, imgId: `${imgId[imgId.length - 2]}` }])
-                })
-                .catch(err => console.log(err))
-        });
-    }, [data.residents])
+    console.log(props.planetData)
 
     var settings = {
         className: "slider variable-width",
@@ -86,15 +41,15 @@ function PlanetsDetails(props) {
                         <div className='details_info-container flex'>
                             <img src={`https://starwars-visualguide.com/assets/img/planets/${planetId}.jpg`} alt='planet' />
                             <div className='details_info'>
-                                <p className='title'>{props.planetData.planet.users.name}</p>
-                                <p>{props.planetData.planet.population}</p>
-                                <p>{props.planetData.planet.users.rotation_period} days</p>
-                                <p>{props.planetData.planet.users.orbital_period} days</p>
-                                <p>{props.planetData.planet.users.diameter} km</p>
-                                <p>{props.planetData.planet.users.gravity}</p>
-                                <p>{props.planetData.planet.users.terrain}</p>
-                                <p>{props.planetData.planet.users.surface_water}%</p>
-                                <p>{props.planetData.planet.users.climate}</p>
+                                <p className='title'>{props.planetData.planet.users.name || 'unknown'}</p>
+                                <p>{props.planetData.planet.users.population || 'unknown'}</p>
+                                <p>{props.planetData.planet.users.rotation_period || 'unknown'} days</p>
+                                <p>{props.planetData.planet.users.orbital_period || 'unknown'} days</p>
+                                <p>{props.planetData.planet.users.diameter || 'unknown'} km</p>
+                                <p>{props.planetData.planet.users.gravity || 'unknown'}</p>
+                                <p>{props.planetData.planet.users.terrain || 'unknown'}</p>
+                                <p>{props.planetData.planet.users.surface_water || 'unknown'}%</p>
+                                <p>{props.planetData.planet.users.climate || 'unknown'}</p>
                             </div>
                         </div>
                         <div className='all-related-carousels-parent flex'>
@@ -102,38 +57,50 @@ function PlanetsDetails(props) {
                                 <h2>Related Films</h2>
                                 <div className='releted-cards'>
                                     {
-                                        props.planetData.film.related ?
-                                            <Slider {...settings}>
-                                                {
-                                                    props.planetData.film.related && props.planetData.film.related.map((film, index) =>
-                                                        <Link
-                                                            key={index}
-                                                            to={`/films/${film.url.split('/').at(-2)}`}
-                                                        >
-                                                            <RelatedLinks
-                                                                imgUrl={`https://starwars-visualguide.com/assets/img/films/${film.url.split('/').at(-2)}.jpg`}
-                                                                linkTitle={film.title}
-                                                            />
-                                                        </Link>)
-                                                }
-                                            </Slider>
-                                            : <Loader />
+
+                                        props.planetData.film.loading ? <Loader /> :
+                                            props.planetData.film.related.length === 0 ? "There are no related items for this category" :
+                                                <Slider {...settings}>
+                                                    {
+                                                        props.planetData.film.related && props.planetData.film.related.map((film, index) =>
+                                                            <Link
+                                                                key={index}
+                                                                to={`/films/${film.url.split('/').at(-2)}`}
+                                                            >
+                                                                <RelatedLinks
+                                                                    imgUrl={`https://starwars-visualguide.com/assets/img/films/${film.url.split('/').at(-2)}.jpg`}
+                                                                    linkTitle={film.title}
+                                                                />
+                                                            </Link>)
+                                                    }
+                                                </Slider>
                                     }
                                 </div>
                             </div>
-                            {/* <div className='carousel-parent'>
+                            <div className='carousel-parent'>
                                 <h2>Related Residents</h2>
                                 <div className='releted-cards'>
                                     {
-                                        residents.length > 0 ?
-                                            <Slider {...settings}>
-                                                {
-                                                    residents.map((resident, index) => <Link key={index} to={`/characters/${resident.imgId}`}><RelatedLinks imgUrl={resident.imgUrl} linkTitle={resident.title} /></Link>)
-                                                }
-                                            </Slider> : <Loader />
+                                        props.planetData.film.loading ? <Loader /> :
+                                            props.planetData.film.related.length === 0 ? "There are no related items for this category" :
+                                                <Slider {...settings}>
+                                                    {
+                                                        props.planetData.film.related && props.planetData.film.related.map((film, index) =>
+                                                            <Link
+                                                                key={index}
+                                                                to={`/films/${film.url.split('/').at(-2)}`}
+                                                            >
+                                                                <RelatedLinks
+                                                                    imgUrl={`https://starwars-visualguide.com/assets/img/characters/${film.url.split('/').at(-2)}.jpg`}
+                                                                    linkTitle={film.title}
+                                                                />
+                                                            </Link>)
+                                                    }
+                                                </Slider>
+
                                     }
                                 </div>
-                            </div> */}
+                            </div>
                         </div>
                     </div>
             }
@@ -141,13 +108,13 @@ function PlanetsDetails(props) {
     )
 }
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
     return {
-        planetData: state
+        planetData: state,
     }
 }
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch) => {
     return {
         fetchPlanet: () => dispatch(fetchPlanets(planetId))
     }

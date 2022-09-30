@@ -1,4 +1,4 @@
-import { FETCH_PLANET_FAILURE, FETCH_PLANET_REUEST, FETCH_PLANET_SUCCESS, FETCH_PLANET_RELATED } from "../../redux/types"
+import { FETCH_PLANET_FAILURE, FETCH_PLANET_REUEST, FETCH_PLANET_SUCCESS, FETCH_PLANET_RELATED, EMPTY_PLANET_RELATED } from "../../redux/types"
 
 const initialState = {
     loading: true,
@@ -35,6 +35,12 @@ const planetReducer = (state = initialState, action) => {
             return {
                 ...state,
                 related: [...state.related, action.payload]
+            }
+
+        case EMPTY_PLANET_RELATED:
+            return {
+                ...state,
+                related: [],
             }
 
         default: return state

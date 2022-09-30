@@ -1,5 +1,7 @@
-import { FETCH_STARSHIP_FAILURE, FETCH_STARSHIP_REUEST, FETCH_STARSHIP_SUCCESS, FETCH_STARSHIP_RELATED } from "../../redux/types"
+import { FETCH_STARSHIP_FAILURE, FETCH_STARSHIP_REUEST, FETCH_STARSHIP_SUCCESS, FETCH_STARSHIP_RELATED, EMPTY_STARSHIP_RELATED } from "../../redux/types"
 import axios from 'axios'
+import { emptySpeciesRelatedArray, fetchRelatedSpeciesFromOthers } from "../Species/speciesAction"
+import { emptyFilmRelatedArray, fetchRelatedFilmsFromOthers } from "../Films/filmAction"
 
 export const fetchStarshipRequest = () => {
     return {
@@ -28,6 +30,32 @@ export const fetchStarshipRelated = (relatedData) => {
     }
 }
 
+// empty starship related array
+export const emptyStarshipRelatedArray = () => {
+    return {
+        type: EMPTY_STARSHIP_RELATED,
+    }
+}
+
+
+export const fetchRelatedStarshipsFromOthers = (starshipId) => {
+    return (dispatch) => {
+        dispatch(fetchStarshipRequest)
+        axios
+            .get(`https://swapi.dev/api/starships/${starshipId}/`)
+            .then(res => {
+                const users = res.data
+                dispatch(fetchStarshipSuccess(users))
+                dispatch(fetchStarshipRelated(users))
+            })
+            .catch(error => {
+                const errMsg = error.message
+                dispatch(fetchStarshipFailure(errMsg))
+            })
+    }
+}
+
+
 export const fetchStarships = (starshipId) => {
     return (dispatch) => {
         dispatch(fetchStarshipRequest)
@@ -37,6 +65,10 @@ export const fetchStarships = (starshipId) => {
                 const users = res.data
                 dispatch(fetchStarshipSuccess(users))
                 dispatch(fetchStarshipRelated(users))
+
+                //Related Films array getting clean
+                dispatch(emptyFilmRelatedArray())
+                users.films?.forEach(specie => dispatch(fetchRelatedFilmsFromOthers(specie.split('/').at(-2))))
             })
             .catch(error => {
                 const errMsg = error.message

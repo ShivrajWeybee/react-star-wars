@@ -1,4 +1,4 @@
-import { FETCH_SPECIES_FAILURE, FETCH_SPECIES_REUEST, FETCH_SPECIES_SUCCESS, FETCH_SPECIES_RELATED } from "../../redux/types"
+import { FETCH_SPECIES_FAILURE, FETCH_SPECIES_REUEST, FETCH_SPECIES_SUCCESS, FETCH_SPECIES_RELATED, EMPTY_SPECIES_RELATED } from "../../redux/types"
 
 const initialState = {
     loading: true,
@@ -37,6 +37,12 @@ const speciesReducer = (state = initialState, action) => {
                 loading: false,
                 related: [...state.related, action.payload]
 
+            }
+
+        case EMPTY_SPECIES_RELATED:
+            return {
+                ...state,
+                related: [],
             }
 
         default: return state

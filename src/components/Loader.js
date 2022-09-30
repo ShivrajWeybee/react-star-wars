@@ -14,6 +14,8 @@ export const Loader = () => {
         //     visible={true}
         // />
 
-        <BarLoader color="yellow" />
+        <div className='loader-container'>
+            <BarLoader color="yellow" />
+        </div>
     )
 }

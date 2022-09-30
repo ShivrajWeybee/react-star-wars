@@ -2,6 +2,7 @@ import { FETCH_API_REUEST, FETCH_API_SUCCESS, FETCH_API_FAILURE } from "./types"
 import axios from "axios";
 
 export const fetchApiRequest = () => {
+    console.log("fetchApiRequest")
     return {
         type: FETCH_API_REUEST
     }
@@ -25,7 +26,7 @@ export const fetchApiFailure = (error) => {
 export const fetchApis = (category, pageNo = 1) => {
     console.log(category, pageNo)
     return (dispatch) => {
-        dispatch(fetchApiRequest)
+        dispatch(fetchApiRequest());
         axios
             .get(`https://swapi.dev/api/${category}/?page=${pageNo}`)
             .then(res => {

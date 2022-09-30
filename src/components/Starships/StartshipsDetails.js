@@ -23,7 +23,7 @@ function StartshipsDetails(props) {
 
     useEffect(() => {
         props.fetchStarship()
-    })
+    }, [])
 
     useEffect(() => {
         axios
@@ -59,25 +59,24 @@ function StartshipsDetails(props) {
 
     return (
         <div>
-            <NavigationBar />
             {
-                props.starshipData.loading ? <Loader /> :
+                props.starshipData.starship.loading ? <Loader /> :
                     <div className='detailpage-container'>
                         <div className='details_info-container flex'>
                             <img src={`https://starwars-visualguide.com/assets/img/starships/${starshipId}.jpg`} alt='movie poster' />
                             <div className='details_info'>
-                                <p className='title'>{props.starshipData.users.name}</p>
-                                <p>{props.starshipData.users.model}</p>
-                                <p>{props.starshipData.users.starship_class}</p>
-                                <p>{props.starshipData.users.manufacturer}</p>
-                                <p>{props.starshipData.users.cost_in_credits}</p>
-                                <p>{props.starshipData.users.max_atmosphering_speed} km/h</p>
-                                <p>{props.starshipData.users.hyperdrive_rating}</p>
-                                <p>{props.starshipData.users.MGLT}</p>
-                                <p>{props.starshipData.users.length}</p>
-                                <p>{props.starshipData.users.cargo_capacity}</p>
-                                <p>{props.starshipData.users.crew}</p>
-                                <p>{props.starshipData.users.passengers}</p>
+                                <p className='title'>{props.starshipData.starship.users.name || 'unknown'}</p>
+                                <p>Modal - {props.starshipData.starship.users.model || 'unknown'}</p>
+                                <p>Class - {props.starshipData.starship.users.starship_class || 'unknown'}</p>
+                                <p>Manufacturer - {props.starshipData.starship.users.manufacturer || 'unknown'}</p>
+                                <p>Cost in Credits - {props.starshipData.starship.users.cost_in_credits || 'unknown'}</p>
+                                <p>Speed - {props.starshipData.starship.users.max_atmosphering_speed || 'unknown'} km/h</p>
+                                <p>HyperDrive Rating - {props.starshipData.starship.users.hyperdrive_rating || 'unknown'}</p>
+                                <p>MGLT - {props.starshipData.starship.users.MGLT || 'unknown'}</p>
+                                <p>Length - {props.starshipData.starship.users.length || 'unknown'}</p>
+                                <p>Cargo Capacity - {props.starshipData.starship.users.cargo_capacity || 'unknown'}</p>
+                                <p>Crew - {props.starshipData.starship.users.crew || 'unknown'}</p>
+                                <p>Passanger - {props.starshipData.starship.users.passengers || 'unknown'}</p>
                             </div>
                         </div>
                         <div className='all-related-carousels-parent flex'>
@@ -85,12 +84,21 @@ function StartshipsDetails(props) {
                                 <h2>Related Films</h2>
                                 <div className='releted-cards'>
                                     {
-                                        films.length > 0 ?
-                                            <Slider {...settings}>
-                                                {
-                                                    films && films.map(film => <Link to={`/films/${film.imgId}`} ><RelatedLinks key={films[film]} imgUrl={film.imgUrl} linkTitle={film.title} /></Link>)
-                                                }
-                                            </Slider> : <Loader />
+                                        props.starshipData.film.loading ? <Loader /> :
+                                            props.starshipData.film.related.length === 0 ? "There are no related items for this category" :
+                                                <Slider {...settings}>
+                                                    {
+                                                        props.starshipData.film.related && props.starshipData.film.related.map((starship, index) =>
+                                                            <Link
+                                                                key={index}
+                                                                to={`/starships/${starship.url.split('/').at(-2)}`} >
+                                                                <RelatedLinks
+                                                                    imgUrl={`https://starwars-visualguide.com/assets/img/films/${starship.url.split('/').at(-2)}.jpg`}
+                                                                    linkTitle={starship.title}
+                                                                />
+                                                            </Link>)
+                                                    }
+                                                </Slider>
                                     }
                                 </div>
                             </div>
@@ -114,13 +122,13 @@ function StartshipsDetails(props) {
     )
 }
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
     return {
-        starshipData: state.starship,
+        starshipData: state,
     }
 }
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch) => {
     return {
         fetchStarship: () => dispatch(fetchStarships(starshipId))
     }

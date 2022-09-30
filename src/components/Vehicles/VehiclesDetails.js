@@ -22,7 +22,7 @@ function VehiclesDetails(props) {
 
     useEffect(() => {
         props.fetchVehicle()
-    })
+    }, [])
 
     useEffect(() => {
         axios
@@ -58,23 +58,22 @@ function VehiclesDetails(props) {
 
     return (
         <div>
-            <NavigationBar />
             {
-                props.vehicleData.loading ? <Loader /> :
+                props.vehicleData.vehicle.loading ? <Loader /> :
                     <div className='detailpage-container'>
                         <div className='details_info-container flex'>
                             <img src={`https://starwars-visualguide.com/assets/img/vehicles/${vehicleId}.jpg`} alt='movie poster' />
                             <div className='details_info'>
-                                <p className='title'>{props.vehicleData.users.name}</p>
-                                <p>{props.vehicleData.users.model}</p>
-                                <p>{props.vehicleData.users.manufacturer}</p>
-                                <p>{props.vehicleData.users.vehicle_class}</p>
-                                <p>{props.vehicleData.users.cost_in_credits}</p>
-                                <p>{props.vehicleData.users.max_atmosphering_speed} km/h</p>
-                                <p>{props.vehicleData.users.length}</p>
-                                <p>{props.vehicleData.users.cargo_capacity}</p>
-                                <p>{props.vehicleData.users.crew}</p>
-                                <p>{props.vehicleData.users.passengers}</p>
+                                <p className='title'>{props.vehicleData.vehicle.users.name || 'unknown'}</p>
+                                <p>{props.vehicleData.vehicle.users.model || 'unknown'}</p>
+                                <p>{props.vehicleData.vehicle.users.manufacturer || 'unknown'}</p>
+                                <p>{props.vehicleData.vehicle.users.vehicle_class || 'unknown'}</p>
+                                <p>{props.vehicleData.vehicle.users.cost_in_credits || 'unknown'}</p>
+                                <p>{props.vehicleData.vehicle.users.max_atmosphering_speed || 'unknown'} km/h</p>
+                                <p>{props.vehicleData.vehicle.users.length || 'unknown'}</p>
+                                <p>{props.vehicleData.vehicle.users.cargo_capacity || 'unknown'}</p>
+                                <p>{props.vehicleData.vehicle.users.crew || 'unknown'}</p>
+                                <p>{props.vehicleData.vehicle.users.passengers || 'unknown'}</p>
                             </div>
                         </div>
                         <div className='all-related-carousels-parent flex'>
@@ -82,12 +81,21 @@ function VehiclesDetails(props) {
                                 <h2>Related Films</h2>
                                 <div className='releted-cards'>
                                     {
-                                        films.length > 0 ?
-                                            <Slider {...settings}>
-                                                {
-                                                    films && films.map(film => <Link to={`/films/${film.imgId}`} ><RelatedLinks key={films[film]} imgUrl={film.imgUrl} linkTitle={film.title} /></Link>)
-                                                }
-                                            </Slider> : <Loader />
+                                        props.vehicleData.film.loading ? <Loader /> :
+                                            props.vehicleData.film.related.length === 0 ? "There are no related items for this category" :
+                                                <Slider {...settings}>
+                                                    {
+                                                        props.vehicleData.film.related && props.vehicleData.film.related.map((film, index) =>
+                                                            <Link
+                                                                key={index}
+                                                                to={`/films/${film.url.split('/').at(-2)}`} >
+                                                                <RelatedLinks
+                                                                    imgUrl={`https://starwars-visualguide.com/assets/img/films/${film.url.split('/').at(-2)}.jpg`}
+                                                                    linkTitle={film.title}
+                                                                />
+                                                            </Link>)
+                                                    }
+                                                </Slider>
                                     }
                                 </div>
                             </div>
@@ -111,13 +119,13 @@ function VehiclesDetails(props) {
     )
 }
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
     return {
-        vehicleData: state.vehicle,
+        vehicleData: state,
     }
 }
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch) => {
     return {
         fetchVehicle: () => dispatch(fetchVehicles(vehicleId))
     }
